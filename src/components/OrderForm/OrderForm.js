@@ -4,6 +4,7 @@ function OrderForm(props) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
   console.log("OrderForm rendered");
+  const [alert, setAlert] = useState(null)
 
 
   const submitOrder = async (order) => {
@@ -39,15 +40,17 @@ function OrderForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setAlert('')
     if (!name || ingredients.length === 0) {
-      alert("PROVIDE A NAME AND INGREDIENT OR YOU CAN NOT SUBMIT!!!!!!")
-    }
+      setAlert("PROVIDE A NAME AND INGREDIENT OR YOU CAN NOT SUBMIT!!!!!!")
+    } else {
 
     const order = {name, ingredients}
     submitOrder(order)
       .then((newOrder) => 
       props.getNewOrder(newOrder))
-    .then(() => clearInputs());
+    }
+  clearInputs();
     }
   
 
@@ -84,6 +87,9 @@ function OrderForm(props) {
 
   return (
     <form>
+      {alert && (
+        <p>{alert}</p>
+      )}
       <input
         type="text"
         placeholder="Name"
