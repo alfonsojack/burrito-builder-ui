@@ -38,12 +38,15 @@ describe("Write a test covering what should be displayed when the user first vis
     cy.get('p').should('contain', 'steak');
     cy.get(':nth-child(15)').click();
     cy.get('form > :nth-child(1)').should('contain', "PROVIDE A NAME AND INGREDIENT");
+    cy.get('section').children().should('have.length', '3')
     cy.get('input').type('Jack');
     cy.get(':nth-child(15)').should('contain', 'Nothing selected');
     cy.get(':nth-child(16)').click();
     cy.get('form > :nth-child(1)').should('contain', "PROVIDE A NAME AND INGREDIENT");
+    cy.get('section').children().should('have.length', '3')
     cy.get('input').should('have.value', '');
     cy.get(':nth-child(15)').should('contain', 'Nothing selected');
+    cy.get('section').children().should('have.length', '3')
     cy.get(':nth-child(16)').click();
     cy.get('form > :nth-child(1)').should('contain', 'PROVIDE A NAME AND INGREDIENT')
   });
