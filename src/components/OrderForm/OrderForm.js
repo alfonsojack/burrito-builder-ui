@@ -3,11 +3,53 @@ import { useState } from "react";
 function OrderForm(props) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
+  console.log("OrderForm rendered");
+
+
+  const submitOrder = async (order) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`${response.status}`)
+      }
+
+      console.log('success', response)
+      return response.json();
+    } catch (error) {
+      console.error("OOPS CANt submit", error)
+    }
+  
+  }
+
+  const handleIngredientClick = (ingredient, e) => {
+    e.preventDefault();
+    setIngredients((prevIngredients) => {
+      const updatedIngredients = [...prevIngredients, ingredient];
+      return updatedIngredients;
+    });
+  };
+
 
   function handleSubmit(e) {
     e.preventDefault();
-    clearInputs();
-  }
+    if (!name || ingredients.length === 0) {
+      alert("PROVIDE A NAME AND INGREDIENT OR YOU CAN NOT SUBMIT!!!!!!")
+    }
+
+    const order = {name, ingredients}
+    submitOrder(order)
+      .then((newOrder) => 
+      props.getNewOrder(newOrder))
+    .then(() => clearInputs());
+    }
+  
 
   function clearInputs() {
     setName("");
@@ -33,7 +75,7 @@ function OrderForm(props) {
       <button
         key={ingredient}
         name={ingredient}
-        // onClick={(e) => }
+        onClick={(e) => handleIngredientClick(ingredient, e)}
       >
         {ingredient}
       </button>
@@ -47,7 +89,7 @@ function OrderForm(props) {
         placeholder="Name"
         name="name"
         value={name}
-        // onChange={(e) => }
+        onChange={(e) => setName(e.target.value)}
       />
 
       {ingredientButtons}
