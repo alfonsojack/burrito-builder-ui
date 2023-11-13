@@ -12,7 +12,9 @@ describe("Write a test covering what should be displayed when the user first vis
     cy.get('input').should('have.value', '');
     cy.get('[name="beans"]').should('exist');
     cy.get(':nth-child(15)').should('contain', 'Submit Order');
-    cy.get('section > :nth-child(1)').should('contain', 'Pat')
+    cy.get('section > :nth-child(1)').should('contain', 'Pat');
+    cy.get('p').should('contain', 'Nothing');
+    cy.get('section').children().should('have.length', '3')
   });
 
   it("Write a test to check the user flow of adding a new order to the DOM.", () => {
